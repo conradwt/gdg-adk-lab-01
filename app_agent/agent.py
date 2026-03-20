@@ -14,6 +14,11 @@ from google.adk.apps.app import App
 
 from adk_utils.plugins import Graceful429Plugin
 
+from pydantic import BaseModel, Field
+
+class CountryCapital(BaseModel):
+  capital: str = Field(description="A country's capital.")
+
 # Retry options help avoid the occasional error from popular models
 # receiving too many requests at once.
 retry_options = types.HttpRetryOptions(initial_delay=1, attempts=6)
@@ -46,6 +51,7 @@ async def main():
             instruction="Answer questions.",
         before_model_callback=log_query_to_model,
         after_model_callback=log_model_response,
+        output_schema=CountryCapital,
     )
 
     graceful_plugin = Graceful429Plugin(
@@ -74,7 +80,7 @@ async def main():
 
     # 5. Prepare a function to package a user's message as
     # genai.types.Content, run it asynchronously, and iterate
-    # through the response 
+    # through the response
     async def run_prompt(session: Session, new_message: str):
         content = types.Content(
                 role='user', parts=[types.Part.from_text(text=new_message)]
