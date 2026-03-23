@@ -1,6 +1,6 @@
 # GDG ADK LAB 01
 
-## Authentication
+## Setup and Requirements
 
 - Option A - Google Gemini API Key
   1. set environment variables in .env file
